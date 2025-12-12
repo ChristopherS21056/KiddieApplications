@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiddie Teacher - Scan QR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .tap-effect:active { transform: scale(0.97); transition: transform 0.1s; }
+        
+        /* Animasi Garis Scanner */
+        @keyframes scan {
+            0%, 100% { top: 10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 90%; opacity: 0; }
+        }
+        .scan-line {
+            position: absolute;
+            left: 10%;
+            width: 80%;
+            height: 4px;
+            background: #06b6d4; /* Cyan-500 */
+            box-shadow: 0 0 15px #06b6d4;
+            border-radius: 50%;
+            animation: scan 2s linear infinite;
+        }
+
+        /* Animasi Modal Slide Up */
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-enter { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    </style>
+</head>
+<body class="bg-gray-900 flex justify-center items-center min-h-screen m-0">
+
+    <div class="w-full max-w-md h-[100dvh] bg-black shadow-2xl relative overflow-hidden flex flex-col">
+
+        <div class="absolute top-0 left-0 right-0 p-6 z-20 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent pt-8">
+            <a href="./dashboardTeacher.html" class="p-2 -ml-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition tap-effect">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </a>
+            <div class="flex flex-col items-center">
+                <h1 class="text-lg font-bold text-white tracking-wide">Scan Pickup QR</h1>
+                <p class="text-[10px] text-gray-300 bg-black/30 px-2 py-0.5 rounded-md backdrop-blur-sm">Arahkan kamera ke QR Code</p>
+            </div>
+            <button onclick="toggleFlash()" class="p-2 -mr-2 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition tap-effect">
+                <i id="flashIcon" data-lucide="zap-off" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 relative flex items-center justify-center bg-gray-800">
+            <div class="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1596496050844-461ac73c2612?q=80&w=600&auto=format&fit=crop')] bg-cover bg-center"></div>
+            
+            <div class="absolute inset-0 bg-black/50 z-10 mask-camera"></div>
+
+            <div class="relative z-20 w-64 h-64 border-2 border-white/30 rounded-3xl flex items-center justify-center overflow-hidden bg-white/5 backdrop-blur-[2px]">
+                <div class="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-cyan-400 rounded-tl-xl -mt-[2px] -ml-[2px]"></div>
+                <div class="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-cyan-400 rounded-tr-xl -mt-[2px] -mr-[2px]"></div>
+                <div class="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-cyan-400 rounded-bl-xl -mb-[2px] -ml-[2px]"></div>
+                <div class="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-cyan-400 rounded-br-xl -mb-[2px] -mr-[2px]"></div>
+                
+                <div class="scan-line"></div>
+                
+                <p class="text-white/50 text-xs absolute bottom-4 animate-pulse">Scanning...</p>
+            </div>
+        </div>
+
+        <div class="bg-black/90 backdrop-blur-md p-6 pb-28 rounded-t-[2rem] -mt-6 z-20 border-t border-white/10 relative">
+            <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+            
+            <div class="flex justify-around items-center text-white/70 text-xs font-medium">
+                <button class="flex flex-col items-center gap-2 hover:text-cyan-400 transition tap-effect">
+                    <div class="p-3 bg-white/10 rounded-2xl"><i data-lucide="image" class="w-5 h-5"></i></div>
+                    Gallery
+                </button>
+                
+                <button onclick="simulateScanSuccess()" class="flex flex-col items-center gap-2 text-white scale-110 -mt-6 tap-effect">
+                    <div class="p-5 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full shadow-lg shadow-cyan-500/40 border-4 border-black">
+                        <i data-lucide="scan-line" class="w-7 h-7"></i>
+                    </div>
+                    <span class="text-cyan-400 font-bold">Scan Now</span>
+                </button>
+
+                <button class="flex flex-col items-center gap-2 hover:text-cyan-400 transition tap-effect">
+                    <div class="p-3 bg-white/10 rounded-2xl"><i data-lucide="keyboard" class="w-5 h-5"></i></div>
+                    Manual
+                </button>
+            </div>
+        </div>
+
+        <div id="resultModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md px-6">
+            <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 modal-enter relative overflow-hidden text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i data-lucide="check" class="w-10 h-10 text-green-600"></i>
+                </div>
+
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Kode Terverifikasi!</h2>
+                <p class="text-xs text-gray-400 mb-6">Penjemputan disetujui</p>
+
+                <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 text-left mb-6 relative">
+                    <div class="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-12 bg-green-500 rounded-r-full"></div>
+                    <div class="flex items-center gap-4 mb-3">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Vassel" class="w-12 h-12 rounded-full bg-white shadow-sm">
+                        <div>
+                            <p class="text-xs text-gray-400 font-bold uppercase">Siswa</p>
+                            <h3 class="font-bold text-gray-800">Vassel Goleyu</h3>
+                            <p class="text-[10px] text-gray-500">Kelas B1</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 my-2"></div>
+                    <div class="flex justify-between items-center pt-1">
+                        <div>
+                            <p class="text-[10px] text-gray-400">Penjemput</p>
+                            <p class="text-xs font-bold text-gray-700">Bpk. Haryanto (Ayah)</p>
+                        </div>
+                        <span class="text-xs font-mono text-gray-400">14:05</span>
+                    </div>
+                </div>
+
+                <button onclick="closeResult()" class="w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold shadow-lg hover:bg-gray-800 transition active:scale-95">
+                    Selesai & Tutup
+                </button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-2 pb-5 flex justify-between items-end z-40 rounded-t-[2rem] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+            <a href="./dashboardTeacher.html" class="flex flex-col items-center gap-1 p-2 w-16 text-gray-400 hover:text-cyan-500 transition group tap-effect">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Home</span>
+            </a>
+            <a href="./teacher-input-scores.html" class="flex flex-col items-center gap-1 p-2 w-16 text-gray-400 hover:text-cyan-500 transition group tap-effect">
+                <i data-lucide="users" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Student</span>
+            </a>
+            <div class="-mt-12 relative z-50">
+                <a href="./qr-code.html" class="flex items-center justify-center bg-gradient-to-tr from-cyan-500 to-blue-500 w-16 h-16 rounded-full shadow-lg text-white border-[6px] border-white active:scale-95 transition">
+                    <i data-lucide="scan-line" class="w-7 h-7"></i>
+                </a>
+            </div>
+            <a href="./teacher-manage-schedule.html" class="flex flex-col items-center gap-1 p-2 w-16 text-gray-400 hover:text-cyan-500 transition group tap-effect">
+                <i data-lucide="calendar-days" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Schedule</span>
+            </a>
+            <button class="flex flex-col items-center gap-1 p-2 w-16 text-cyan-600">
+                <i data-lucide="user" class="w-6 h-6 fill-current"></i>
+                <span class="text-[10px] font-bold">Profile</span>
+                <div class="w-1 h-1 bg-cyan-600 rounded-full mt-0.5"></div>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // 1. Flash Toggle Simulation
+        let isFlashOn = false;
+        function toggleFlash() {
+            const icon = document.getElementById('flashIcon');
+            isFlashOn = !isFlashOn;
+            
+            if (isFlashOn) {
+                icon.setAttribute('data-lucide', 'zap');
+                icon.classList.add('text-yellow-400', 'fill-yellow-400');
+                // Simulate flash effect on camera
+                document.querySelector('.opacity-40').classList.replace('opacity-40', 'opacity-80');
+            } else {
+                icon.setAttribute('data-lucide', 'zap-off');
+                icon.classList.remove('text-yellow-400', 'fill-yellow-400');
+                document.querySelector('.opacity-80').classList.replace('opacity-80', 'opacity-40');
+            }
+            lucide.createIcons();
+        }
+
+        // 2. Scan Success Simulation
+        function simulateScanSuccess() {
+            // Add slight delay to simulate processing
+            const btn = document.querySelector('.scan-line');
+            btn.style.background = '#22c55e'; // Green
+            btn.style.boxShadow = '0 0 15px #22c55e';
+
+            setTimeout(() => {
+                const modal = document.getElementById('resultModal');
+                modal.classList.remove('hidden');
+                
+                // Reset scanner line color
+                setTimeout(() => {
+                    btn.style.background = '#06b6d4';
+                    btn.style.boxShadow = '0 0 15px #06b6d4';
+                }, 500);
+            }, 800);
+        }
+
+        function closeResult() {
+            document.getElementById('resultModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

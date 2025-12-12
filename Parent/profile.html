@@ -12,6 +12,13 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .tap-effect:active { transform: scale(0.97); transition: transform 0.1s; }
+        
+        /* Animasi untuk Modal Raport */
+        @keyframes slideUpModal {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-animate { animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     </style>
 </head>
 <body class="bg-gray-100 flex justify-center items-center min-h-screen m-0">
@@ -25,7 +32,7 @@
                 
                 <div class="relative inline-block mb-3 mt-2">
                     <div class="relative w-28 h-28">
-                        <img id="profileImage" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Vassel" alt="Profile" class="w-full h-full rounded-full border-[5px] border-white shadow-xl object-cover bg-gray-100">
+                        <img id="profileImage" src="./vassel.jpg" alt="Profile" class="w-full h-full rounded-full border-[5px] border-white shadow-xl object-cover bg-gray-100">
                         <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(event)">
                         <button onclick="triggerFileUpload()" class="absolute bottom-0 right-0 bg-cyan-500 hover:bg-cyan-600 text-white p-2.5 rounded-full border-4 border-white shadow-lg transition-transform active:scale-90">
                             <i data-lucide="camera" class="w-4 h-4"></i>
@@ -59,7 +66,6 @@
                     </div>
                     
                     <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 space-y-4">
-                        
                         <div class="flex justify-between items-center border-b border-gray-50 pb-3">
                             <div class="flex items-center gap-3">
                                 <div class="bg-blue-50 p-2 rounded-xl text-blue-500"><i data-lucide="user" class="w-4 h-4"></i></div>
@@ -69,19 +75,15 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="flex justify-between items-center border-b border-gray-50 pb-3">
                             <div class="flex items-center gap-3">
                                 <div class="bg-purple-50 p-2 rounded-xl text-purple-500"><i data-lucide="id-card" class="w-4 h-4"></i></div>
                                 <div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase">NIS & Kelas</p>
-                                    <p class="text-sm font-semibold text-gray-700">
-                                        <span id="detailNis">20250012</span> • <span id="detailClass">Class B1</span>
-                                    </p>
+                                    <p class="text-sm font-semibold text-gray-700"><span id="detailNis">20250012</span> • <span id="detailClass">Class B1</span></p>
                                 </div>
                             </div>
                         </div>
-
                         <div class="flex justify-between items-center border-b border-gray-50 pb-3">
                             <div class="flex items-center gap-3">
                                 <div class="bg-yellow-50 p-2 rounded-xl text-yellow-500"><i data-lucide="cake" class="w-4 h-4"></i></div>
@@ -91,7 +93,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="flex justify-between items-center border-b border-gray-50 pb-3">
                             <div class="flex items-center gap-3">
                                 <div class="bg-green-50 p-2 rounded-xl text-green-500"><i data-lucide="users" class="w-4 h-4"></i></div>
@@ -101,7 +102,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-3">
                                 <div class="bg-red-50 p-2 rounded-xl text-red-500"><i data-lucide="phone" class="w-4 h-4"></i></div>
@@ -110,9 +110,55 @@
                                     <p id="detailPhone" class="text-sm font-semibold text-gray-700">+62 812-3456-7890</p>
                                 </div>
                             </div>
-                            <button class="bg-green-100 p-2 rounded-full text-green-600 hover:bg-green-200 transition">
-                                <i data-lucide="message-circle" class="w-4 h-4"></i>
-                            </button>
+                            <button class="bg-green-100 p-2 rounded-full text-green-600 hover:bg-green-200 transition"><i data-lucide="message-circle" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-3 ml-1">
+                        <h3 class="font-bold text-gray-400 text-xs uppercase tracking-widest">Riwayat Akademik</h3>
+                        <button class="text-cyan-500 text-xs font-semibold hover:text-cyan-600">Lihat Semua</button>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-2 shadow-sm border border-gray-100 space-y-2">
+                        
+                        <div onclick="openReportModal()" class="p-3 rounded-2xl hover:bg-gray-50 transition tap-effect cursor-pointer border border-transparent hover:border-gray-100 group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500 font-bold border border-orange-100">
+                                        4.8
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-gray-800">Semester Ganjil</p>
+                                        <p class="text-[10px] text-gray-400">Tahun Ajaran 2024/2025</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-green-100 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-md">Lulus</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-orange-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="h-px bg-gray-50 mx-4"></div>
+
+                        <div class="p-3 rounded-2xl hover:bg-gray-50 transition tap-effect border border-transparent">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-bold border border-gray-100">
+                                        -
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-gray-800">Semester Genap</p>
+                                        <p class="text-[10px] text-gray-400">Tahun Ajaran 2024/2025</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-blue-50 text-blue-500 text-[10px] font-bold px-2 py-0.5 rounded-md">Berjalan</span>
+                                    <i data-lucide="lock" class="w-4 h-4 text-gray-300"></i>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -123,7 +169,7 @@
                     <div class="bg-white rounded-3xl p-2 shadow-sm border border-gray-100">
                         <button class="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition tap-effect group">
                             <div class="flex items-center gap-4">
-                                <div class="bg-orange-50 p-2 rounded-xl text-orange-500"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                                <div class="bg-purple-50 p-2 rounded-xl text-purple-500"><i data-lucide="file-text" class="w-5 h-5"></i></div>
                                 <span class="text-sm font-semibold text-gray-700">Rekam Medis</span>
                             </div>
                             <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300"></i>
@@ -140,7 +186,56 @@
             </div>
         </div>
 
-        <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-2 pb-5 flex justify-between items-end z-50 rounded-t-[2rem] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+        <div id="reportModal" class="hidden fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm">
+            <div class="bg-white w-full max-w-md rounded-t-[2.5rem] p-6 modal-animate h-[80vh] flex flex-col">
+                
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Detail Nilai</h2>
+                        <p class="text-xs text-gray-500">Semester Ganjil 2024/2025</p>
+                    </div>
+                    <button onclick="closeReportModal()" class="bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto no-scrollbar space-y-4 pr-1">
+                    
+                    <div class="bg-gradient-to-r from-orange-400 to-orange-500 rounded-3xl p-5 text-white shadow-lg shadow-orange-200 mb-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-orange-100 text-xs mb-1">Grade Point Average</p>
+                                <h3 class="text-3xl font-bold">4.8 <span class="text-sm font-normal opacity-80">/ 5.0</span></h3>
+                            </div>
+                            <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
+                                <i data-lucide="trophy" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-white/20 flex gap-4">
+                            <div>
+                                <p class="text-xs text-orange-100">Peringkat</p>
+                                <p class="font-bold text-sm">3 dari 25</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-orange-100">Predikat</p>
+                                <p class="font-bold text-sm">Sangat Baik</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="subjectList" class="space-y-3">
+                        </div>
+                </div>
+
+                <div class="mt-4 pt-2">
+                    <button class="w-full py-4 bg-cyan-500 hover:bg-cyan-600 text-white rounded-2xl font-bold shadow-lg shadow-cyan-200 transition active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i> Unduh Raport PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-2 pb-5 flex justify-between items-end z-40 rounded-t-[2rem] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
             <a href="./dashboardParent.html" class="flex flex-col items-center gap-1 p-2 w-16 text-gray-400 hover:text-cyan-500 transition group tap-effect">
                 <i data-lucide="home" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Home</span>
@@ -168,8 +263,7 @@
     </div>
 
     <script>
-        // 1. DATA SISWA (Simulasi Database)
-        // Anda bisa mengubah data ini, dan tampilan HTML akan otomatis berubah
+        // 1. DATA SISWA
         const studentData = {
             namaAnak: "Vassel Goleyu",
             kelas: "Class B1",
@@ -177,17 +271,24 @@
             ttl: "Jakarta, 12 Mei 2019",
             namaOrangTua: "Bpk. Haryanto Goleyu",
             noTelepon: "+62 812-3456-7890",
-            fotoProfil: "https://api.dicebear.com/7.x/avataaars/svg?seed=Vassel" // Default
+            fotoProfil: "https://api.dicebear.com/7.x/avataaars/svg?seed=Vassel" 
         };
 
-        // 2. FUNGSI LOAD DATA KE HTML
+        // DATA NILAI RAPORT (BARU)
+        const reportData = [
+            { subject: "Mathematics", score: 95, icon: "calculator", color: "blue" },
+            { subject: "English Language", score: 88, icon: "languages", color: "purple" },
+            { subject: "Science", score: 92, icon: "flask-conical", color: "green" },
+            { subject: "Art & Craft", score: 98, icon: "palette", color: "pink" },
+            { subject: "Physical Education", score: 85, icon: "dumbbell", color: "red" }
+        ];
+
+        // 2. FUNGSI LOAD DATA
         function loadProfileData() {
-            // Update Header
             document.getElementById('headerName').textContent = studentData.namaAnak;
             document.getElementById('headerClass').textContent = studentData.kelas;
             document.getElementById('headerNis').textContent = studentData.nis;
             
-            // Update Detail Card
             document.getElementById('detailName').textContent = studentData.namaAnak;
             document.getElementById('detailNis').textContent = studentData.nis;
             document.getElementById('detailClass').textContent = studentData.kelas;
@@ -196,31 +297,60 @@
             document.getElementById('detailPhone').textContent = studentData.noTelepon;
         }
 
-        // 3. FUNGSI UPLOAD FOTO
-        function triggerFileUpload() {
-            document.getElementById('fileInput').click();
+        // 3. FUNGSI MODAL RAPORT (BARU)
+        function openReportModal() {
+            const modal = document.getElementById('reportModal');
+            const listContainer = document.getElementById('subjectList');
+            
+            // Populate Data Nilai
+            listContainer.innerHTML = '';
+            reportData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-gray-50 p-3 rounded-2xl flex items-center justify-between border border-gray-100";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="bg-${item.color}-100 p-2 rounded-xl text-${item.color}-500">
+                            <i data-lucide="${item.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-700">${item.subject}</p>
+                            <div class="w-24 h-1.5 bg-gray-200 rounded-full mt-1.5 overflow-hidden">
+                                <div class="h-full bg-${item.color}-400 rounded-full" style="width: ${item.score}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-bold text-gray-800">${item.score}</p>
+                        <p class="text-[10px] text-gray-400 font-medium">/100</p>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+            
+            lucide.createIcons();
+            modal.classList.remove('hidden');
         }
 
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+        }
+
+        // 4. UTILITIES
+        function triggerFileUpload() { document.getElementById('fileInput').click(); }
+        
         function previewImage(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profileImage').src = e.target.result;
-                    // Di sini Anda bisa menambahkan logika upload ke server
-                }
+                reader.onload = function(e) { document.getElementById('profileImage').src = e.target.result; }
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // 4. FUNGSI LOGOUT
         function confirmLogout() {
-            if(confirm("Apakah Anda yakin ingin keluar?")) {
-                window.location.href = "../index.html";
-            }
+            if(confirm("Apakah Anda yakin ingin keluar?")) { window.location.href = "../index.html"; }
         }
 
-        // Initialize
         window.onload = () => {
             loadProfileData();
             lucide.createIcons();
