@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan & Statistik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f97316; /* Oranye sesuai kartu */
+            --bg-light: #fff7ed;
+            --text-dark: #431407;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0; padding: 20px; color: var(--text-dark);
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .page-title {
+            color: var(--primary-color); display: flex; align-items: center; gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Summary Cards Section */
+        .summary-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px; margin-bottom: 40px;
+        }
+        .card {
+            background: var(--white); border-radius: 16px; padding: 25px;
+            box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);
+            display: flex; align-items: center; transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card-icon {
+            width: 60px; height: 60px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; margin-right: 20px;
+        }
+        .icon-orange { background: #ffedd5; color: var(--primary-color); }
+        .icon-blue { background: #dbeafe; color: #2563eb; }
+        .icon-green { background: #dcfce7; color: #166534; }
+        
+        .card-info h3 { margin: 0; font-size: 32px; font-weight: 800; }
+        .card-info p { margin: 5px 0 0; color: #78716c; font-weight: 500; }
+
+        /* Charts Section (Mockup) */
+        .charts-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 25px;
+        }
+        .chart-card {
+            background: var(--white); border-radius: 16px; padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .chart-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px;
+        }
+        .chart-header h4 { margin: 0; font-size: 18px; color: #57534e; }
+
+        /* Placeholder for Charts - Visual Only */
+        .chart-placeholder {
+            height: 300px; background-color: #fef3c7; border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            color: #d97706; font-style: italic; border: 2px dashed #fcd34d;
+        }
+        .chart-placeholder-pie { height: 300px; border-radius: 50%; width: 300px; margin: 0 auto; background: conic-gradient(var(--primary-color) 0% 60%, #fbbf24 60% 90%, #f87171 90% 100%); }
+
+        @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+            <a href="./dashboard-admin.html" class="back-btn"><i class="fas fa-arrow-left"></i> Dashboard</a>
+            <h1><i class="fas fa-chalkboard-teacher"></i> Tambah Guru Baru</h1>
+        </div>
+        
+    <div class="container">
+        <div class="page-title">
+            <h1><i class="fas fa-chart-pie"></i> Laporan & Statistik Sekolah</h1>
+        </div>
+
+        <div class="summary-grid">
+            <div class="card">
+                <div class="card-icon icon-blue"><i class="fas fa-user-graduate"></i></div>
+                <div class="card-info">
+                    <h3>450</h3>
+                    <p>Total Siswa</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon icon-green"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div class="card-info">
+                    <h3>32</h3>
+                    <p>Total Guru</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon icon-orange"><i class="fas fa-clipboard-check"></i></div>
+                <div class="card-info">
+                    <h3>95%</h3>
+                    <p>Kehadiran Hari Ini</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h4><i class="fas fa-chart-line"></i> Statistik Pendaftaran Siswa Baru (Bulanan)</h4>
+                    <select style="padding: 5px; border-radius: 5px;"><option>Tahun Ini</option></select>
+                </div>
+                <div class="chart-placeholder">
+                    Area Grafik Garis (Memerlukan JavaScript Chart Library)
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h4><i class="fas fa-chart-pie"></i> Komposisi Siswa per Jenjang</h4>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 300px;">
+                    <div class="chart-placeholder-pie" title="Visual representasi saja"></div>
+                 </div>
+                 <div style="text-align: center; margin-top: 15px; font-size: 14px;">
+                     <span style="color: var(--primary-color)">■ Kelas X (60%)</span> | 
+                     <span style="color: #fbbf24">■ Kelas XI (30%)</span> | 
+                     <span style="color: #f87171">■ Kelas XII (10%)</span>
+                 </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
